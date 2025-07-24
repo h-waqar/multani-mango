@@ -5,7 +5,7 @@ import { ToastProvider, Toast, ToastTitle } from "@radix-ui/react-toast";
 import { ScrollArea } from "@radix-ui/react-scroll-area";
 import { CartProvider, useCart } from "./context/CartContext";
 import mangoes from "./data/mangoes";
-import Admin from "./app/admin.jsx";
+import Admin from "./app/admin/page.jsx";
 
 function Header({ onNav }) {
   return (
