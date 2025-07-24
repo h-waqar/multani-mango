@@ -1,22 +1,69 @@
 "use client";
-import { useCart } from '../context/CartContext';
+
+import Link from "next/link";
+import { useState } from "react";
+import { useCart } from "../context/CartContext";
+import { Menu, X } from "lucide-react"; // Install lucide-react for icons
 
 export default function Header() {
   const { cart } = useCart();
+  const [menuOpen, setMenuOpen] = useState(false);
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
+
   return (
-    <header className="bg-yellow-400 p-4 flex justify-between items-center">
-      <div className="font-pacifico text-2xl">Multani Mango</div>
-      <nav>
-        <a href="/" className="mx-2">Home</a>
-        <a href="/shop" className="mx-2">Shop</a>
-        <a href="/cart" className="mx-2 relative">
-          Cart
-          {count > 0 && (
-            <span className="absolute -top-2 -right-3 bg-[#4CAF50] text-white rounded-full px-2 text-xs">{count}</span>
-          )}
-        </a>
-      </nav>
+    <header className="bg-[var(--background)] text-[var(--foreground)] shadow-md px-4 py-3 sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto flex justify-between items-center">
+        {/* Logo */}
+        <div className="font-pacifico text-2xl text-[var(--primary)]">
+          Multani Mango
+        </div>
+
+        {/* Desktop Nav */}
+        <nav className="hidden md:flex gap-6 text-sm font-medium">
+          <Link href="/" className="hover:text-[var(--primary)] transition-colors">
+            Home
+          </Link>
+          <Link href="/shop" className="hover:text-[var(--primary)] transition-colors">
+            Shop
+          </Link>
+          <Link href="/cart" className="relative hover:text-[var(--primary)] transition-colors">
+            Cart
+            {count > 0 && (
+              <span className="absolute -top-2 -right-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-full px-2 text-xs font-bold">
+                {count}
+              </span>
+            )}
+          </Link>
+        </nav>
+
+        {/* Mobile Menu Button */}
+        <button
+          className="md:hidden text-[var(--foreground)]"
+          onClick={() => setMenuOpen(!menuOpen)}
+        >
+          {menuOpen ? <X size={24} /> : <Menu size={24} />}
+        </button>
+      </div>
+
+      {/* Mobile Nav */}
+      {menuOpen && (
+        <nav className="md:hidden mt-2 flex flex-col gap-3 px-2 text-sm font-medium bg-[var(--background)] border-t border-[var(--border)] pt-3">
+          <Link href="/" className="hover:text-[var(--primary)] transition-colors" onClick={() => setMenuOpen(false)}>
+            Home
+          </Link>
+          <Link href="/shop" className="hover:text-[var(--primary)] transition-colors" onClick={() => setMenuOpen(false)}>
+            Shop
+          </Link>
+          <Link href="/cart" className="relative hover:text-[var(--primary)] transition-colors" onClick={() => setMenuOpen(false)}>
+            Cart
+            {count > 0 && (
+              <span className="absolute top-0 right-0 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-full px-2 text-xs font-bold">
+                {count}
+              </span>
+            )}
+          </Link>
+        </nav>
+      )}
     </header>
   );
 }

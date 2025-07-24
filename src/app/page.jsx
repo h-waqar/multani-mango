@@ -1,2 +1,10 @@
-import App from '../App';
-export default App;
+import Header from "@/components/Header";
+
+export default function Home() {
+  return (
+    <>
+      <Header />
+
+    </>
+  );
+}
