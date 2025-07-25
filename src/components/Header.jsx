@@ -11,7 +11,7 @@ export default function Header() {
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
 
   return (
-    <header className="bg-[var(--background)] text-[var(--foreground)] shadow-md px-4 py-3 sticky top-0 z-50">
+    <header className="bg-[var(--header-color)] text-[var(--foreground)] shadow-md px-4 py-3 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex justify-between items-center">
           {/* Logo */}

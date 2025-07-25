@@ -47,10 +47,14 @@
 :root {
   --radius: 0.625rem;
 
-  --background: oklch(0.99 0.03 85);               /* Light mango cream */
-  --foreground: oklch(0.25 0.04 60);               /* Rich dark brown text */
+  --header-color: oklch(100% 0.00011 271.152);              
 
-  --card: oklch(0.985 0.025 85);
+  --background: oklch(0.99 0.03 85);               /* Light mango cream */
+  --foreground: oklch(0.25 0.04 60);        
+  
+/* Rich dark brown text */
+
+  --card: oklch(100% 0.00011 271.152);
   --card-foreground: oklch(0.25 0.04 60);
 
   --popover: oklch(0.985 0.02 85);
