@@ -62,17 +62,22 @@ export function CartProvider({ children }) {
     setCart((prev) => prev.filter((item) => item.id !== id));
   }
 
-  // 7. Expose the cart and all actions to components
+  // ✅ 7. Clear the entire cart
+  function clearCart() {
+    setCart([]);
+  }
+
+  // 8. Expose the cart and all actions to components
   return (
     <CartContext.Provider
-      value={{ cart, addToCart, updateQty, removeFromCart }}
+      value={{ cart, addToCart, updateQty, removeFromCart, clearCart }} // ✅ expose clearCart
     >
       {children}
     </CartContext.Provider>
   );
 }
 
-// 8. Custom hook to easily access cart context
+// 9. Custom hook to easily access cart context
 export function useCart() {
   return useContext(CartContext);
 }
