@@ -143,7 +143,7 @@ export default function Shop() {
                   <ProductCard
                     key={mango.id}
                     mango={mango}
-                    onAdd={() => addToCart(mango)} // ✅ using context function
+                    onAdd={() => addToCart(mango) } // ✅ using context function
                   />
                 ))}
               </div>

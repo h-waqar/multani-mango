@@ -1,13 +1,18 @@
 "use client";
 import { useState } from "react";
 import { Plus, Minus } from "lucide-react";
+// import { useCart } from "@/context/CartContext";
 
 export default function ProductCard({ mango, onAdd }) {
   const [qty, setQty] = useState(1);
   const [showMsg, setShowMsg] = useState(false);
 
+  // const {updateQty} = useCart(); // Import updateQty from context
+
   function handleAdd() {
+    mango.qty = qty; // Set the quantity on the mango object
     onAdd({ ...mango, qty });
+    console.log("Added to cart:", mango);
     setShowMsg(true);
     setTimeout(() => setShowMsg(false), 1200);
   }
