@@ -9,8 +9,9 @@ export default function OrdersPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const ordersPerPage = 5;
+  const ordersPerPage = 10;
 
+  // Fetch orders
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -28,6 +29,21 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
+  // Restore fallback statuses from localStorage
+  useEffect(() => {
+    const fallbackStatuses =
+      JSON.parse(localStorage.getItem("orderStatusFallback")) || {};
+
+    setOrders((prev) =>
+      prev.map((order) =>
+        fallbackStatuses[order._id]
+          ? { ...order, status: fallbackStatuses[order._id] }
+          : order
+      )
+    );
+  }, []);
+
+  // Search filter
   useEffect(() => {
     const filtered = orders.filter((order) =>
       order.name.toLowerCase().includes(searchTerm.toLowerCase())
@@ -39,7 +55,10 @@ export default function OrdersPage() {
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
   const indexOfLastOrder = currentPage * ordersPerPage;
   const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = filteredOrders.slice(indexOfFirstOrder, indexOfLastOrder);
+  const currentOrders = filteredOrders.slice(
+    indexOfFirstOrder,
+    indexOfLastOrder
+  );
 
   const goToPage = (pageNum) => {
     if (pageNum >= 1 && pageNum <= totalPages) {
@@ -47,32 +66,51 @@ export default function OrdersPage() {
     }
   };
 
+  // Handle status update
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       const res = await fetch(`/api/order/${orderId}`, {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify({ status: newStatus }),
       });
 
       if (!res.ok) throw new Error("Failed to update status");
 
+      // Update UI from server response
       setOrders((prev) =>
         prev.map((order) =>
           order._id === orderId ? { ...order, status: newStatus } : order
         )
       );
+
+      // Clean up localStorage fallback
+      const local = JSON.parse(localStorage.getItem("orderStatusFallback")) || {};
+      delete local[orderId];
+      localStorage.setItem("orderStatusFallback", JSON.stringify(local));
     } catch (err) {
-      alert("Status update failed.");
+      console.error("Status update failed. Saving to localStorage...");
+
+      // Save to localStorage fallback
+      const local = JSON.parse(localStorage.getItem("orderStatusFallback")) || {};
+      local[orderId] = newStatus;
+      localStorage.setItem("orderStatusFallback", JSON.stringify(local));
+
+      // Update UI anyway
+      setOrders((prev) =>
+        prev.map((order) =>
+          order._id === orderId ? { ...order, status: newStatus } : order
+        )
+      );
     }
   };
 
   return (
     <div
-      className="p-6 sm:p-8 md:p-10 shadow-xl rounded-2xl transition-all duration-300 bg-white" 
-      style={{
-        color: "var(--foreground)",
-      }}
+      className="p-6 sm:p-8 md:p-10 shadow-xl rounded-2xl transition-all duration-300 bg-white"
+      style={{ color: "var(--foreground)" }}
     >
       <h2
         className="text-3xl sm:text-4xl font-extrabold mb-6"
@@ -108,7 +146,10 @@ export default function OrdersPage() {
       ) : (
         <>
           <div className="overflow-auto">
-            <table className="min-w-full text-sm" style={{ borderColor: "var(--border)" }}>
+            <table
+              className="min-w-full text-sm"
+              style={{ borderColor: "var(--border)" }}
+            >
               <thead
                 style={{
                   backgroundColor: "var(--popover)",
@@ -175,7 +216,9 @@ export default function OrdersPage() {
 
                       <select
                         value={order.status || "pending"}
-                        onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                        onChange={(e) =>
+                          handleStatusChange(order._id, e.target.value)
+                        }
                         className="block w-full text-xs rounded"
                         style={{
                           backgroundColor: "var(--input)",
