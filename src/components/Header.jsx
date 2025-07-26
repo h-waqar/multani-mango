@@ -1,13 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCart } from "../context/CartContext";
 import { Menu, X } from "lucide-react"; // Install lucide-react for icons
 
 export default function Header() {
   const { cart } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
   const count = cart.reduce((sum, item) => sum + item.qty, 0);
 
   return (
@@ -41,7 +47,7 @@ export default function Header() {
             className="relative hover:text-[var(--primary)] transition-colors"
           >
             Cart
-            {count > 0 && (
+            {isMounted && count > 0 && (
               <span className="absolute -top-2 -right-3 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-full px-2 text-xs font-bold">
                 {count}
               </span>
@@ -81,7 +87,7 @@ export default function Header() {
             onClick={() => setMenuOpen(false)}
           >
             Cart
-            {count > 0 && (
+            {isMounted && count > 0 && (
               <span className="absolute top-0 right-0 bg-[var(--primary)] text-[var(--primary-foreground)] rounded-full px-2 text-xs font-bold">
                 {count}
               </span>

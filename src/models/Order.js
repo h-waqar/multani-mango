@@ -12,6 +12,12 @@ const OrderSchema = new mongoose.Schema({
     enum: ["cod", "bank"], // 'cod' = Cash on Delivery, 'bank' = Online
   },
 
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "recieved"],
+    default: "pending",
+  },
+
   transactionId: {
     type: String,
     required: function () {
@@ -32,7 +38,7 @@ const OrderSchema = new mongoose.Schema({
     },
   ],
 
-   status: {
+  status: {
     type: String,
     enum: ["pending", "completed", "declined", "shipped"],
     default: "pending",
