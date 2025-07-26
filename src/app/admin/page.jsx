@@ -1,39 +1,51 @@
-"use client";
-import { useEffect, useState } from "react";
-import { ScrollArea } from "@radix-ui/react-scroll-area";
+import { Package, Users, ShoppingCart,  } from "lucide-react";
 
-export default function Admin() {
-  const [orders, setOrders] = useState([]);
-  const [loading, setLoading] = useState(true);
-  useEffect(() => {
-    fetch("/api/order")
-      .then(res => res.json())
-      .then(data => {
-        setOrders(data);
-        setLoading(false);
-      });
-  }, []);
+export default function AdminPage() {
+  const stats = [
+    {
+      title: "Orders",
+      value: 1240,
+      icon: <ShoppingCart className="w-6 h-6 text-yellow-600" />,
+    },
+    {
+      title: "Products",
+      value: 312,
+      icon: <Package className="w-6 h-6 text-green-600" />,
+    },
+    {
+      title: "Users",
+      value: 980,
+      icon: <Users className="w-6 h-6 text-blue-600" />,
+    },
+  ];
+
   return (
-    <div className="max-w-4xl mx-auto py-8">
-      <h1 className="text-3xl font-bold mb-6 text-[#F4C430]">Admin: Sales Orders</h1>
-      {loading ? <div>Loading...</div> : (
-        <ScrollArea className="border rounded-lg bg-white shadow p-4">
-          {orders.length === 0 ? <div>No orders yet.</div> : orders.map(order => (
-            <div key={order._id} className="mb-6 border-b pb-4">
-              <div className="font-bold text-lg">{order.name} ({order.phone})</div>
-              <div className="mb-1">{order.address}</div>
-              <div className="mb-1">Payment: {order.payment} | TxID: {order.transactionId}</div>
-              <div className="mb-1">Date: {new Date(order.createdAt).toLocaleString()}</div>
-              <div className="mb-2 font-semibold">Cart:</div>
-              <ul className="ml-4 list-disc">
-                {order.cart.map(item => (
-                  <li key={item._id}>{item.name} x {item.qty} @ Rs. {item.price}/kg</li>
-                ))}
-              </ul>
+    <div className="p-6 sm:p-8 md:p-10 bg-white dark:bg-zinc-900 shadow-xl rounded-2xl transition-all duration-300">
+      {/* Welcome Section */}
+      <h2 className="text-3xl sm:text-4xl font-extrabold mb-4 bg-gradient-to-r from-yellow-500 via-orange-500 to-pink-500 text-transparent bg-clip-text">
+        🚀 Welcome to Your Admin Panel
+      </h2>
+      <p className="text-base sm:text-lg text-gray-700 dark:text-gray-300 leading-relaxed mb-6">
+        This is your control center. Manage users, add and list games, create tournaments, and tailor your platform settings—all from one place.
+      </p>
+
+      {/* Stat Cards */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {stats.map((item, i) => (
+          <div
+            key={i}
+            className="flex items-center justify-between bg-zinc-100 dark:bg-zinc-800 p-5 rounded-xl shadow-sm hover:shadow-md transition"
+          >
+            <div>
+              <p className="text-sm text-gray-500 dark:text-gray-400">{item.title}</p>
+              <h3 className="text-2xl font-bold text-zinc-900 dark:text-white">{item.value}</h3>
             </div>
-          ))}
-        </ScrollArea>
-      )}
+            <div className="bg-white dark:bg-zinc-700 p-2 rounded-full shadow">
+              {item.icon}
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

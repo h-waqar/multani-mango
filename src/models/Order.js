@@ -4,8 +4,25 @@ const OrderSchema = new mongoose.Schema({
   name: { type: String, required: true },
   phone: { type: String, required: true },
   address: { type: String, required: true },
-  payment: { type: String, required: true },
-  transactionId: { type: String, required: true },
+  email: { type: String, required: true },
+
+  payment: {
+    type: String,
+    required: true,
+    enum: ["cod", "bank"], // 'cod' = Cash on Delivery, 'bank' = Online
+  },
+
+  transactionId: {
+    type: String,
+    required: function () {
+      return this.payment === "bank"; // Required only for bank payment
+    },
+  },
+
+  bank: {
+    type: String, // optional, but often paired with bank payment
+  },
+
   cart: [
     {
       _id: String,
@@ -14,6 +31,7 @@ const OrderSchema = new mongoose.Schema({
       qty: Number,
     },
   ],
+
   createdAt: { type: Date, default: Date.now },
 });
 
