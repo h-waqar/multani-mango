@@ -14,7 +14,7 @@ export default function DashboardLayout({ children }) {
       {/* Sidebar */}
       <Sidebar
         isOpen={isSidebarOpen}
-        toggleSidebar={() => setIsSidebarOpen(false)} 
+        onClose={() => setIsSidebarOpen(false)} 
       />
 
       {/* Main Content Area */}

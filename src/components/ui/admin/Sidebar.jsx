@@ -24,8 +24,8 @@ export default function Sidebar({ isOpen, onClose }) {
   const links = [
     { name: "Dashboard", href: "/admin" },
     { name: "Orders", href: "/admin/orders" },
-    { name: "Products", href: "/products" },
-    { name: "Settings", href: "/settings" },
+    // { name: "Products", href: "/products" },
+    // { name: "Settings", href: "/settings" },
   ];
 
   return (
@@ -33,7 +33,7 @@ export default function Sidebar({ isOpen, onClose }) {
       {/* Mobile Overlay */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black bg-opacity-40 z-40 md:hidden"
+          className="fixed inset-0 bg-[var(--sidebar-bg)] bg-opacity-40 z-40 md:hidden"
           onClick={onClose}
         />
       )}

@@ -11,7 +11,9 @@ export default function OrdersPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 10;
 
-  // Fetch orders
+  const [statusFilter, setStatusFilter] = useState("all");
+
+  // Fetch orders from API
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -29,28 +31,19 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
-  // Restore fallback statuses from localStorage
+  // Search functionality
   useEffect(() => {
-    const fallbackStatuses =
-      JSON.parse(localStorage.getItem("orderStatusFallback")) || {};
-
-    setOrders((prev) =>
-      prev.map((order) =>
-        fallbackStatuses[order._id]
-          ? { ...order, status: fallbackStatuses[order._id] }
-          : order
-      )
-    );
-  }, []);
-
-  // Search filter
-  useEffect(() => {
-    const filtered = orders.filter((order) =>
-      order.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+    const filtered = orders.filter((order) => {
+      const matchesSearch = order.name
+        .toLowerCase()
+        .includes(searchTerm.toLowerCase());
+      const matchesStatus =
+        statusFilter === "all" || order.status === statusFilter;
+      return matchesSearch && matchesStatus;
+    });
     setFilteredOrders(filtered);
     setCurrentPage(1);
-  }, [searchTerm, orders]);
+  }, [searchTerm, statusFilter, orders]);
 
   const totalPages = Math.ceil(filteredOrders.length / ordersPerPage);
   const indexOfLastOrder = currentPage * ordersPerPage;
@@ -69,41 +62,27 @@ export default function OrdersPage() {
   // Handle status update
   const handleStatusChange = async (orderId, newStatus) => {
     try {
-      const res = await fetch(`/api/order/${orderId}`, {
+      const res = await fetch("/api/order/patch", {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ status: newStatus }),
+        body: JSON.stringify({ _id: orderId, status: newStatus }), // ✅ use correct value
       });
+
+      const result = await res.json();
 
       if (!res.ok) throw new Error("Failed to update status");
 
-      // Update UI from server response
+      // ✅ Update local state or re-fetch
       setOrders((prev) =>
         prev.map((order) =>
           order._id === orderId ? { ...order, status: newStatus } : order
         )
       );
-
-      // Clean up localStorage fallback
-      const local = JSON.parse(localStorage.getItem("orderStatusFallback")) || {};
-      delete local[orderId];
-      localStorage.setItem("orderStatusFallback", JSON.stringify(local));
     } catch (err) {
-      console.error("Status update failed. Saving to localStorage...");
-
-      // Save to localStorage fallback
-      const local = JSON.parse(localStorage.getItem("orderStatusFallback")) || {};
-      local[orderId] = newStatus;
-      localStorage.setItem("orderStatusFallback", JSON.stringify(local));
-
-      // Update UI anyway
-      setOrders((prev) =>
-        prev.map((order) =>
-          order._id === orderId ? { ...order, status: newStatus } : order
-        )
-      );
+      console.error("Failed to update status:", err.message);
+      alert("Failed to update status.");
     }
   };
 
@@ -113,10 +92,8 @@ export default function OrdersPage() {
       style={{ color: "var(--foreground)" }}
     >
       <h2
-        className="text-3xl sm:text-4xl font-extrabold mb-6"
+        className="text-3xl sm:text-4xl font-extrabold mb-6 bg-gradient-to-r from-yellow-500 via-orange-500 to-pink-500"
         style={{
-          backgroundImage:
-            "linear-gradient(to right, var(--primary), var(--accent), var(--destructive))",
           WebkitBackgroundClip: "text",
           color: "transparent",
         }}
@@ -124,18 +101,36 @@ export default function OrdersPage() {
         📋 Orders Table View
       </h2>
 
-      <input
-        type="text"
-        placeholder="Search by name..."
-        className="mb-4 px-4 py-2 border rounded w-full sm:w-1/2"
-        style={{
-          backgroundColor: "var(--input)",
-          color: "var(--foreground)",
-          borderColor: "var(--border)",
-        }}
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
+      <div className="flex items-center gap-4 flex-col sm:flex-row mb-4">
+        <input
+          type="text"
+          placeholder="Search by name..."
+          className="px-4 py-2 border rounded w-full sm:w-1/2"
+          style={{
+            backgroundColor: "var(--input)",
+            color: "var(--foreground)",
+            borderColor: "var(--border)",
+          }}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
+        <select
+          value={statusFilter}
+          onChange={(e) => setStatusFilter(e.target.value)}
+          className="px-4 py-2 border rounded w-full sm:w-1/2"
+          style={{
+            backgroundColor: "var(--input)",
+            color: "var(--foreground)",
+            borderColor: "var(--border)",
+          }}
+        >
+          <option value="all">All Statuses</option>
+          <option value="pending">Pending</option>
+          <option value="completed">Completed</option>
+          <option value="shipped">Shipped</option>
+          <option value="declined">Declined</option>
+        </select>
+      </div>
 
       {loading ? (
         <p style={{ color: "var(--muted-foreground)" }}>Loading orders...</p>
@@ -213,7 +208,6 @@ export default function OrdersPage() {
                       >
                         View
                       </Link>
-
                       <select
                         value={order.status || "pending"}
                         onChange={(e) =>
@@ -254,7 +248,6 @@ export default function OrdersPage() {
             >
               Prev
             </button>
-
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
               <button
                 key={num}
@@ -273,7 +266,6 @@ export default function OrdersPage() {
                 {num}
               </button>
             ))}
-
             <button
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage === totalPages}
