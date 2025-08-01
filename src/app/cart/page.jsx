@@ -1,10 +1,8 @@
 "use client";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-
-import { useCart } from "@/context/CartContext";
-import { Minus, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { Minus, Plus, Trash2 } from "lucide-react";
+import { useCart } from "@/context/CartContext";
+import { banks } from "@/data/details";
 
 export default function CartPage() {
   const { cart, updateQty, removeFromCart, clearCart } = useCart();
@@ -14,32 +12,38 @@ export default function CartPage() {
   const [transactionId, setTransactionId] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState("");
-
   const [name, setName] = useState("");
-  const [email, setEmail] = useState(""); // NEW email state
+  const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
 
-  const banks = [
-    {
-      id: "hbl",
-      name: "HBL",
-      account: "1234-5678-9000",
-      iban: "PK00HBL0000001234567890",
-    },
-    {
-      id: "meezan",
-      name: "Meezan Bank",
-      account: "2233-4455-6677",
-      iban: "PK00MEZN0000002233445566",
-    },
-    {
-      id: "ubl",
-      name: "UBL",
-      account: "9988-7766-5544",
-      iban: "PK00UBL0000009988776655",
-    },
-  ];
+  // const banks = [
+  //   {
+  //     id: "hbl",
+  //     name: "HBL",
+  //     logo: "/banks/hbl.png",
+  //     accountTitle: "MOBEEN",
+  //     accountNumber: "22467913703903",
+  //     iban: "PK02HABB0022467913703903",
+  //     branch: "GARDEN TOWN, MULTAN",
+  //   },
+  //   {
+  //     id: "ubl",
+  //     name: "UBL",
+  //     logo: "/banks/ubl.png",
+  //     accountTitle: "Mobeen Ahmad",
+  //     accountNumber: "246771726",
+  //     iban: "PK47UNIL0109000246771726",
+  //     branchCode: "0278",
+  //   },
+  //   {
+  //     id: "raast",
+  //     name: "Raast ID",
+  //     logo: "/banks/raast.png",
+  //     accountTitle: "Mobeen Ahmad",
+  //     accountNumber: "03000702338",
+  //   },
+  // ];
 
   const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
 
@@ -114,15 +118,13 @@ export default function CartPage() {
 
   return (
     <>
-      <Header />
-
       <div className="max-w-6xl mx-auto p-6">
         <h1 className="text-3xl font-bold text-[var(--primary)] text-center mb-8">
           🛒 Your Cart
         </h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left: Cart Items */}
+          {/* Cart Items */}
           <div className="space-y-6">
             {cart.map((item) => (
               <div
@@ -158,7 +160,6 @@ export default function CartPage() {
                     </div>
                   </div>
                 </div>
-
                 <div className="text-right sm:text-center">
                   <p className="font-medium text-lg">
                     Rs. {(item.price * item.qty).toLocaleString()}
@@ -179,7 +180,7 @@ export default function CartPage() {
             </div>
           </div>
 
-          {/* Right: Customer Info Form */}
+          {/* Customer Info Form */}
           <div className="bg-white border rounded-xl p-6 space-y-6">
             <h2 className="text-2xl font-semibold mb-2">🧾 Customer Info</h2>
 
@@ -214,10 +215,10 @@ export default function CartPage() {
               />
             </div>
 
-            {/* Payment */}
+            {/* Payment Method */}
             <div>
               <h2 className="text-xl font-semibold mb-2">💳 Payment Method</h2>
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-3">
                 <label className="flex items-center gap-2">
                   <input
                     type="radio"
@@ -229,47 +230,80 @@ export default function CartPage() {
                   Cash on Delivery
                 </label>
 
-                <label className="flex flex-col">
-                  <div className="flex items-center gap-2">
-                    <input
-                      type="radio"
-                      name="payment"
-                      value="bank"
-                      checked={paymentMethod === "bank"}
-                      onChange={() => setPaymentMethod("bank")}
-                    />
-                    Bank Transfer
-                  </div>
-
-                  {paymentMethod === "bank" && (
-                    <div className="ml-6 mt-2 space-y-2 text-sm">
-                      <select
-                        value={selectedBank}
-                        onChange={(e) => setSelectedBank(e.target.value)}
-                        className="w-full border rounded p-2"
-                      >
-                        <option value="">-- Select Bank --</option>
-                        {banks.map((bank) => (
-                          <option key={bank.id} value={bank.name}>
-                            {bank.name} - A/C: {bank.account} - IBAN:{" "}
-                            {bank.iban}
-                          </option>
-                        ))}
-                      </select>
-                      <input
-                        type="text"
-                        placeholder="Enter Transaction ID"
-                        value={transactionId}
-                        onChange={(e) => setTransactionId(e.target.value)}
-                        className="w-full border rounded p-2"
-                      />
-                    </div>
-                  )}
+                <label className="flex items-center gap-2">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="bank"
+                    checked={paymentMethod === "bank"}
+                    onChange={() => setPaymentMethod("bank")}
+                  />
+                  Bank Transfer
                 </label>
               </div>
+
+              {/* Bank Selection */}
+              {paymentMethod === "bank" && (
+                <div className="mt-4 space-y-4">
+                  {banks.map((bank) => (
+                    <label
+                      key={bank.id}
+                      className={`flex items-start gap-4 p-4 rounded border cursor-pointer transition ${
+                        selectedBank === bank.id
+                          ? "border-[var(--primary)]"
+                          : "border-gray-200"
+                      }`}
+                    >
+                      <input
+                        type="radio"
+                        name="bank-option"
+                        value={bank.id}
+                        checked={selectedBank === bank.id}
+                        onChange={() => setSelectedBank(bank.id)}
+                        className="mt-1"
+                      />
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 mb-1">
+                          {bank.logo ? (
+                            <img
+                              src={bank.logo}
+                              alt={bank.name}
+                              className="w-6 h-6 object-contain"
+                              onError={(e) => (e.target.style.display = "none")}
+                            />
+                          ) : (
+                            <div className="w-6 h-6 bg-gray-300 rounded-full flex items-center justify-center text-sm font-bold text-white">
+                              {bank.name.charAt(0)}
+                            </div>
+                          )}
+                          <h3 className="font-semibold">{bank.name}</h3>
+                        </div>
+                        <p className="text-sm text-gray-600 whitespace-pre-line">
+                          {bank.accountTitle &&
+                            `Account Title: ${bank.accountTitle}\n`}
+                          {bank.accountNumber &&
+                            `Account No: ${bank.accountNumber}\n`}
+                          {bank.iban && `IBAN: ${bank.iban}\n`}
+                          {bank.branch && `Branch: ${bank.branch}\n`}
+                          {bank.branchCode && `Branch Code: ${bank.branchCode}`}
+                        </p>
+                      </div>
+                    </label>
+                  ))}
+
+                  {/* Transaction ID Input */}
+                  <input
+                    type="text"
+                    placeholder="Enter Transaction ID"
+                    value={transactionId}
+                    onChange={(e) => setTransactionId(e.target.value)}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+              )}
             </div>
 
-            {/* Submit Button */}
+            {/* Place Order Button */}
             <button
               onClick={handleCheckout}
               disabled={loading}
@@ -290,7 +324,6 @@ export default function CartPage() {
           </div>
         </div>
       </div>
-      <Footer />
     </>
   );
 }

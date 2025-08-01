@@ -1,3 +1,5 @@
+// src\context\productData.js
+
 export const products = [
   {
     id: 1,

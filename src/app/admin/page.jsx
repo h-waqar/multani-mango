@@ -1,5 +1,5 @@
 "use client";
-
+// src\app\admin\page.jsx
 import { useEffect, useState } from "react";
 import { Package, Users, ShoppingCart, PackageCheck, BanknoteArrowUp, PackageX } from "lucide-react";
 import StatsCard from "@/components/ui/admin/StatsCard";

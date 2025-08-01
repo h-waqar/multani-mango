@@ -1,4 +1,5 @@
 "use client";
+// src\app\admin\orders\page.jsx
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -124,7 +125,7 @@ export default function OrdersPage() {
             borderColor: "var(--border)",
           }}
         >
-          <option value="all">All Statuses</option>
+          <option value="all">All</option>
           <option value="pending">Pending</option>
           <option value="completed">Completed</option>
           <option value="shipped">Shipped</option>

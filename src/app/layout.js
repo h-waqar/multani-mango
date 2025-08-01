@@ -1,6 +1,7 @@
-// src/app/layout.jsx
 import "./globals.css";
 import { CartProvider } from "@/context/CartContext";
+import ClientLayout from "@/components/ClientLayout"; // no metadata in here
+import { Suspense } from "react";
 
 export const metadata = {
   title: "Multani Mango",
@@ -12,7 +13,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <CartProvider>
-          {children}
+          <Suspense fallback={<div>Loading...</div>}>
+            <ClientLayout>{children}</ClientLayout>
+          </Suspense>
         </CartProvider>
       </body>
     </html>

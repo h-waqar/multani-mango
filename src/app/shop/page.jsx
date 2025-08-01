@@ -1,11 +1,9 @@
 "use client";
+// src/app/shop/page.jsx
 import { useState, useMemo } from "react";
 import ProductCard from "@/components/ProductCard";
-import { products } from "@/context/productData";
-import { useCart } from "@/context/CartContext"; // ✅ Correct import
-
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
+import { products } from "@/data/productData";
+import { useCart } from "@/context/CartContext";
 
 const categories = ["All", ...new Set(products.map((p) => p.category))];
 
@@ -52,7 +50,6 @@ export default function Shop() {
 
   return (
     <>
-      <Header />
       <main className="min-h-screen text-[var(--foreground)] px-4 py-12 relative">
         {/* Mobile/Tablet Sidebar Toggle Button */}
         <div className="md:hidden fixed top-20 left-4 z-40">
@@ -143,7 +140,7 @@ export default function Shop() {
                   <ProductCard
                     key={mango.id}
                     mango={mango}
-                    onAdd={() => addToCart(mango) } // ✅ using context function
+                    onAdd={() => addToCart(mango)} // ✅ using context function
                   />
                 ))}
               </div>
@@ -157,7 +154,9 @@ export default function Shop() {
             {totalPages > 1 && (
               <div className="mt-10 flex justify-center items-center gap-2 flex-wrap">
                 <button
-                  onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                  onClick={() =>
+                    setCurrentPage((prev) => Math.max(prev - 1, 1))
+                  }
                   disabled={currentPage === 1}
                   className={`px-4 py-2 border rounded ${
                     currentPage === 1
@@ -200,7 +199,6 @@ export default function Shop() {
           </section>
         </div>
       </main>
-      <Footer />
     </>
   );
 }

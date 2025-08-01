@@ -1,5 +1,5 @@
 "use client";
-
+// src\app\admin\layout.jsx
 import { useState } from "react";
 import Sidebar from "@/components/ui/admin/Sidebar";
 import { Menu } from "lucide-react";

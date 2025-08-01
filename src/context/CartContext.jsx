@@ -1,4 +1,5 @@
 "use client";
+// src\context\CartContext.jsx
 import { createContext, useContext, useEffect, useState } from "react";
 
 // 1. Create a new context to hold cart data and actions
