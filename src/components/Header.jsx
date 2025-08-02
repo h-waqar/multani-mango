@@ -21,11 +21,13 @@ export default function Header() {
       <div className="max-w-7xl mx-auto flex justify-between items-center">
         <div className="flex justify-between items-center">
           {/* Logo */}
-          <img
-            src="/images/logo.png" // replace with your image path
-            alt="Mango Brand Logo"
-            className="w-24 object-contain"
-          />
+          <a href="/">
+            <img
+              src="/images/logo.png" // replace with your image path
+              alt="Mango Brand Logo"
+              className="w-24 object-contain"
+            />
+          </a>
         </div>
 
         {/* Desktop Nav */}

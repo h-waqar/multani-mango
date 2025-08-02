@@ -71,7 +71,7 @@ export default function Shop() {
         <div className="max-w-7xl mx-auto flex gap-8">
           {/* Sidebar */}
           <aside
-            className={`md:static md:translate-x-0 fixed top-0 left-0 z-40 w-3/4 max-w-xs h-full md:h-auto overflow-y-auto bg-white shadow-md border-r transition-transform duration-300 transform ${
+            className={`md:static md:translate-x-0 fixed top-0 left-0 z-40 w-3/4 max-w-xs h-fit mt-14 md:h-auto overflow-y-auto bg-white shadow-md border-r transition-transform duration-300 transform ${
               showSidebar ? "translate-x-0" : "-translate-x-full"
             } md:w-1/4 p-4 rounded-md md:rounded-xl`}
           >

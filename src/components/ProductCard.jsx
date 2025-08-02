@@ -32,13 +32,17 @@ export default function ProductCard({ mango, onAdd }) {
         <img
           src={mango.image}
           alt={mango.name}
-          className="w-full h-48 object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
+          className="w-full h-auto object-cover rounded-xl group-hover:scale-105 transition-transform duration-300"
         />
       </div>
 
       {/* Product Info */}
-      <h3 className="mt-4 text-xl font-semibold text-[var(--primary)]">{mango.name}</h3>
-      <p className="text-sm text-[var(--muted-foreground)] mt-1">{mango.description}</p>
+      <h3 className="mt-4 text-xl font-semibold text-[var(--primary)]">
+        {mango.name}
+      </h3>
+      <p className="text-sm text-[var(--muted-foreground)] mt-1">
+        {mango.description}
+      </p>
       <div className="mt-2 font-medium text-green-600">
         Rs. {mango.price.toLocaleString()} / kg
       </div>
