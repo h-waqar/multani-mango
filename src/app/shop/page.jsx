@@ -10,7 +10,7 @@ const categories = ["All", ...new Set(products.map((p) => p.category))];
 export default function Shop() {
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(["All"]);
-  const [maxPrice, setMaxPrice] = useState(1000);
+  const [maxPrice, setMaxPrice] = useState(1000000);
   const [currentPage, setCurrentPage] = useState(1);
   const [showSidebar, setShowSidebar] = useState(false);
   const itemsPerPage = 6;
@@ -85,6 +85,19 @@ export default function Shop() {
               </button>
             </div>
 
+            {/* This was causing hydration error */}
+
+            {/* <input
+              type="text"
+              placeholder="Search mango..."
+              className="w-full border border-gray-300 p-2 rounded mb-4"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setCurrentPage(1);
+              }}
+            /> */}
+
             <input
               type="text"
               placeholder="Search mango..."
@@ -94,6 +107,8 @@ export default function Shop() {
                 setSearch(e.target.value);
                 setCurrentPage(1);
               }}
+              spellCheck={false}
+              autoComplete="off"
             />
 
             <div className="mb-4">
@@ -111,7 +126,7 @@ export default function Shop() {
               ))}
             </div>
 
-            <div className="mb-4">
+            {/* <div className="mb-4">
               <h3 className="font-medium mb-2">Max Price: Rs. {maxPrice}</h3>
               <input
                 type="range"
@@ -125,7 +140,7 @@ export default function Shop() {
                 }}
                 className="w-full"
               />
-            </div>
+            </div> */}
           </aside>
 
           {/* Products Section */}

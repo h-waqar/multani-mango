@@ -51,10 +51,11 @@ export function CartProvider({ children }) {
 
   // 5. Update quantity of an item directly
   function updateQty(id, qty) {
-    setCart((prev) =>
-      prev
-        .map((item) => (item.id === id ? { ...item, qty } : item))
-        .filter((item) => item.qty > 0) // Remove if qty is 0
+    setCart(
+      (prev) =>
+        prev
+          .map((item) => (item.id === id ? { ...item, qty } : item))
+          .filter((item) => item.qty > 0) // Remove if qty is 0
     );
   }
 
