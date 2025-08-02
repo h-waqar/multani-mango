@@ -1,5 +1,4 @@
 "use client";
-// src\app\admin\orders\page.jsx
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
@@ -11,10 +10,8 @@ export default function OrdersPage() {
   const [error, setError] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const ordersPerPage = 10;
-
   const [statusFilter, setStatusFilter] = useState("all");
 
-  // Fetch orders from API
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -32,14 +29,21 @@ export default function OrdersPage() {
     fetchOrders();
   }, []);
 
-  // Search functionality
   useEffect(() => {
+    const lower = searchTerm.toLowerCase();
     const filtered = orders.filter((order) => {
-      const matchesSearch = order.name
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      const matchesSearch =
+        order.name?.toLowerCase().includes(lower) ||
+        order.phone?.toLowerCase().includes(lower) ||
+        order.address?.toLowerCase().includes(lower) ||
+        new Date(order.createdAt)
+          .toLocaleString()
+          .toLowerCase()
+          .includes(lower);
+
       const matchesStatus =
         statusFilter === "all" || order.status === statusFilter;
+
       return matchesSearch && matchesStatus;
     });
     setFilteredOrders(filtered);
@@ -60,7 +64,6 @@ export default function OrdersPage() {
     }
   };
 
-  // Handle status update
   const handleStatusChange = async (orderId, newStatus) => {
     try {
       const res = await fetch("/api/order/patch", {
@@ -68,14 +71,12 @@ export default function OrdersPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ _id: orderId, status: newStatus }), // ✅ use correct value
+        body: JSON.stringify({ _id: orderId, status: newStatus }),
       });
 
       const result = await res.json();
-
       if (!res.ok) throw new Error("Failed to update status");
 
-      // ✅ Update local state or re-fetch
       setOrders((prev) =>
         prev.map((order) =>
           order._id === orderId ? { ...order, status: newStatus } : order
@@ -105,7 +106,7 @@ export default function OrdersPage() {
       <div className="flex items-center gap-4 flex-col sm:flex-row mb-4">
         <input
           type="text"
-          placeholder="Search by name..."
+          placeholder="Search by name, phone, address or date..."
           className="px-4 py-2 border rounded w-full sm:w-1/2"
           style={{
             backgroundColor: "var(--input)",
@@ -156,9 +157,9 @@ export default function OrdersPage() {
                   {[
                     "#",
                     "Name",
-                    "Email",
                     "Phone",
-                    "Payment",
+                    "Address",
+                    "Remarks",
                     "Total",
                     "Date",
                     "Actions",
@@ -173,17 +174,18 @@ export default function OrdersPage() {
                 {currentOrders.map((order, i) => (
                   <tr
                     key={order._id}
+                    className="hover:bg-opacity-80 transition odd:bg-[var(--card)] even:bg-[var(--muted)]"
                     style={{
                       borderBottom: "1px solid var(--border)",
-                      backgroundColor: "var(--card)",
                     }}
-                    className="hover:bg-opacity-80 transition"
                   >
                     <td className="p-3">{indexOfFirstOrder + i + 1}</td>
                     <td className="p-3">{order.name}</td>
-                    <td className="p-3">{order.email}</td>
                     <td className="p-3">{order.phone}</td>
-                    <td className="p-3 capitalize">{order.payment}</td>
+                    <td className="p-3">{order.address}</td>
+                    <td className="p-3 whitespace-pre-wrap">
+                      {order.remarks || "-"}
+                    </td>
                     <td
                       className="p-3 font-semibold"
                       style={{ color: "var(--primary)" }}

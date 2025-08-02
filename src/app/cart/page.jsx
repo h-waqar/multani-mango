@@ -17,6 +17,7 @@ export default function CartPage() {
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState("");
+  const [remarks, setRemarks] = useState("");
 
   useEffect(() => {
     setIsMounted(true);
@@ -55,6 +56,7 @@ export default function CartPage() {
         transactionId,
         bank: selectedBank,
       }),
+      remarks,
     };
 
     try {
@@ -188,6 +190,13 @@ export default function CartPage() {
               rows={3}
               value={address}
               onChange={(e) => setAddress(e.target.value)}
+            />
+            <textarea
+              placeholder="Remarks (optional)"
+              className="w-full border p-2 rounded col-span-full"
+              rows={2}
+              value={remarks}
+              onChange={(e) => setRemarks(e.target.value)}
             />
           </div>
 

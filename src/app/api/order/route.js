@@ -18,6 +18,7 @@ export async function POST(req) {
       transactionId,
       bank,
       cart,
+      remarks,
     } = body;
 
     if (!name || !phone || !address || !email || !payment || !cart?.length) {

@@ -13,6 +13,11 @@ const OrderSchema = new mongoose.Schema({
     enum: ["cod", "bank"], // 'cod' = Cash on Delivery, 'bank' = Online
   },
 
+  remarks: {
+    type: String,
+    trim: true,
+  },
+
   paymentStatus: {
     type: String,
     enum: ["pending", "recieved"],
@@ -40,10 +45,10 @@ const OrderSchema = new mongoose.Schema({
   ],
 
   status: {
-      type: String,
-      default: "pending", // ✅ this is fine for new orders
-    },
-    
+    type: String,
+    default: "pending", // ✅ this is fine for new orders
+  },
+
   createdAt: { type: Date, default: Date.now },
 });
 
