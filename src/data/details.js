@@ -29,8 +29,8 @@ export const banks = [
 ];
 
 export const contactDetails = {
-  phone: "923000702338",
-  whatsApp: "923000702338",
+  phone: "923395697172",
+  whatsApp: "923395697172",
   email: "mobeen@example.com",
   address: "Garden Town, Multan, Pakistan",
   facebook: "https://facebook.com/multanimango",

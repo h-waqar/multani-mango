@@ -53,11 +53,11 @@ export default function Testimonials() {
                 className="keen-slider__slide bg-[var(--card)] text-[var(--card-foreground)] p-6 rounded-xl shadow border border-[var(--border)]"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <img
+                  {/* <img
                     src={review.image}
                     alt={review.name}
                     className="w-12 h-12 rounded-full object-cover"
-                  />
+                  /> */}
                   <div className="text-left">
                     <h4 className="font-semibold">{review.name}</h4>
                     <p className="text-sm text-[var(--muted-foreground)]">
@@ -73,7 +73,8 @@ export default function Testimonials() {
           </div>
 
           {/* Arrows */}
-          <div className="absolute inset-y-0 left-0 right-0 flex justify-between items-center z-10 pointer-events-none">
+          {/* <div className="absolute inset-y-0 left-0 right-0 flex justify-between items-center z-10 pointer-events-none"> */}
+          <div className="flex justify-center gap-4 mt-4 items-center z-10 pointer-events-none">
             <button
               onClick={() => sliderInstance?.prev()}
               className="p-2 bg-white rounded-full shadow hover:bg-[var(--primary)] hover:text-white transition pointer-events-auto"
@@ -89,7 +90,6 @@ export default function Testimonials() {
           </div>
         </div>
       </div>
-      
     </section>
   );
 }

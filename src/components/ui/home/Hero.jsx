@@ -9,7 +9,7 @@ export default function Hero() {
       <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-10">
         {/* Text Content */}
         <div className="flex-1 text-center md:text-left">
-          <h1 className="text-4xl md:text-5xl font-bold leading-tight text-[var(--primary)]">
+          <h1 className="text-4xl md:text-6xl font-bold leading-tight text-[var(--primary)]">
             Fresh, Juicy, Multani Mangoes 🥭
           </h1>
           <p className="mt-4 text-lg text-[var(--muted-foreground)] max-w-md">
@@ -18,7 +18,7 @@ export default function Hero() {
           </p>
 
           <Link href="/shop">
-            <button className="mt-6 px-6 py-3 rounded-full text-white bg-[var(--primary)] hover:bg-[var(--accent)] transition-colors text-sm font-semibold shadow-lg">
+            <button className="mt-6 px-6 py-3 rounded-full text-white bg-[var(--primary)] hover:bg-[var(--accent)] transition-colors text-xl font-semibold shadow-lg">
               Shop Now
             </button>
           </Link>
